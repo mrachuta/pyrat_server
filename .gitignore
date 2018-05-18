@@ -52,3 +52,6 @@ docs/_build/
 # My files
 pyrat_server/settings.py
 .idea
+bin
+include
+lib
