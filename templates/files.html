@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>:: pyrat :: files uploaded by {{ folder }}</title>
+</head>
+<body>
+    {% for f in files %}
+    <li><a href="/media/client_ups/{{ folder }}/{{ f }}" target="_blank">{{ f }}</a></li>
+    {% endfor %}
+</body>
+</html>

