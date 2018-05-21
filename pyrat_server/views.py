@@ -18,7 +18,7 @@ import os
 import time
 
 
-base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 """
@@ -31,8 +31,9 @@ From this site is possible to execute functions, defined in html file (index.htm
 def index(request):
     # Get associated PC's lists
     host_list = db_fetchall('SELECT * FROM users2')
-    mac_list = db_fetchall('SELECT det_mac FROM users')
-    print(host_list)
+    mac_list = db_fetchall('SELECT det_mac FROM users2')
+    #print(host_list)
+    #print(mac_list)
     # Unwanted chars on mac_list should be deleted - to generate folder name for specific PC / list of folder names
     unw_chars = ['\'', '(', ')', ',']
     time_curr = time.strftime('%Y-%m-%d %H:%M:%S')
@@ -54,9 +55,9 @@ def index(request):
             db_update('UPDATE users2 SET la_diff = \'%s\' WHERE det_mac = \'%s\'' % (la_diff, filt_mac))
             # If folder with filtered mac name exists, update DB
             # For Windows - localhost tests
-            #if os.path.isdir('%s\media\client_ups\%s' % (base_dir, filt_mac)) == True:
+            #if os.path.isdir('%s\media\client_ups\%s' % (BASE_DIR, filt_mac)) == True:
             # For Linux - standard work
-            if os.path.isdir('%s/media/client_ups/%s' % (base_dir, filt_mac)) == True:
+            if os.path.isdir('%s/media/client_ups/%s' % (BASE_DIR, filt_mac)) == True:
                 db_update('UPDATE users2 SET files = \'%s\' WHERE det_mac = \'%s\'' % (filt_mac, filt_mac))
             else:
                 pass
@@ -105,11 +106,11 @@ def register(request):
                  request.POST.get('det_int_ip'), request.POST.get('det_ext_ip'))
             )
             # For Windows - localhost tests
-            #if not os.path.exists('%s\media\client_ups\%s' % (base_dir, (request.POST.get('det_mac')))):
-                #os.makedirs('%s\media\client_ups\%s' % (base_dir, (request.POST.get('det_mac'))))
+            #if not os.path.exists('%s\media\client_ups\%s' % (BASE_DIR, (request.POST.get('det_mac')))):
+                #os.makedirs('%s\media\client_ups\%s' % (BASE_DIR, (request.POST.get('det_mac'))))
             # For Linux - standard work
-            if not os.path.exists('%s/media/client_ups/%s' % (base_dir, (request.POST.get('det_mac')))):
-                os.makedirs('%s/media/client_ups/%s' % (base_dir, (request.POST.get('det_mac'))))
+            if not os.path.exists('%s/media/client_ups/%s' % (BASE_DIR, (request.POST.get('det_mac')))):
+                os.makedirs('%s/media/client_ups/%s' % (BASE_DIR, (request.POST.get('det_mac'))))
             else:
                 pass
             print('++++ DODALEM NOWY PC DO BAZY ++++')
@@ -189,7 +190,7 @@ Important: this is used for transfer only text data.
 @csrf_exempt
 def result(request):
     if request.method == 'POST':
-        # res_params list is used for get result and last activity and store them. Rest of data is in request.POST dict.
+        # res_params list is used for get result and last activity and store them. Rest of data is in request.POST dict
         res_params = {}
         print('=== HOST PRZESYLA REZULTAT KOMENDY ====')
         for key, value in request.POST.items():
@@ -274,7 +275,7 @@ def order(request):
 
 """
 
-When the host check order page, and there is unknow command or no-mac,
+When the host check order page, and there is unknown command or no-mac,
 remote PC send a ping signal, that means, that remote PC is in IDDLE mode.
 Important: this is only one function, that have other name and url
 (see urls.py - ping / last_activity).
@@ -310,9 +311,9 @@ def upload(request):
         #print(str(file))
         # Procedure which save file in specific folder
         # For Windows - localhost tests
-        #fs = FileSystemStorage(location=('%s\media\client_ups\%s' % (base_dir, request.POST.get('det_mac'))))
+        #fs = FileSystemStorage(location=('%s\media\client_ups\%s' % (BASE_DIR, request.POST.get('det_mac'))))
         # For Linux - standard work
-        fs = FileSystemStorage(location=('%s/media/client_ups/%s' % (base_dir, (request.POST.get('det_mac')))))
+        fs = FileSystemStorage(location=('%s/media/client_ups/%s' % (BASE_DIR, (request.POST.get('det_mac')))))
         filename = fs.save(file.name, file)
         print('==== OTRZYMALEM PLIK ====')
         for key, value in request.POST.items():
@@ -335,9 +336,9 @@ the special procedure to generate list of files on webpage was developed.
 @csrf_exempt
 def listfiles(request, folder):
     # For Windows - localhost tests
-    #files = os.listdir('%s\media\client_ups\%s' % (base_dir, folder))
+    #files = os.listdir('%s\media\client_ups\%s' % (BASE_DIR, folder))
     # For Linux - standard work
-    files = os.listdir('%s/media/client_ups/%s' % (base_dir, folder))
+    files = os.listdir('%s/media/client_ups/%s' % (BASE_DIR, folder))
     # Render a webpage with links to files
     return render(request, 'files.html', {
         'files': files,
