@@ -55,3 +55,7 @@ pyrat_server/settings.py
 bin
 include
 lib
+media/client_ups/*
+pip-selfcheck.json
+pyrat_uwsgi.ini
+pyrat_server/uwsgi_params
