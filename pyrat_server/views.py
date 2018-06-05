@@ -16,6 +16,7 @@ import base64
 import os
 #import sys
 import time
+import shutil
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -168,6 +169,16 @@ def command(request):
                 if 'deluser' in request.POST.get('command'):
                     print('++++ USUWAM USERA %s Z DB ++++' % request.POST.get('det_mac'))
                     db_update('DELETE from users2 WHERE det_mac = \'%s\'' % request.POST.get(key))
+                    # For Windows - localhost tests
+                    #if os.path.isdir('%s\media\client_ups\%s' % (BASE_DIR, request.POST.get('det_mac'))) == True:
+                    #shutil.rmtree('%s\media\client_ups\%s' % (BASE_DIR, request.POST.get('det_mac')),
+                                  #ignore_errors=True)
+                    # For Linux - standard work
+                    if os.path.isdir('%s/media/client_ups/%s' % (BASE_DIR, request.POST.get('det_mac'))) == True:
+                        shutil.rmtree('%s/media/client_ups/%s' % (BASE_DIR, request.POST.get('det_mac')),
+                                      ignore_errors=True)
+                    else:
+                        pass
                 else:
                     pass
             else:
