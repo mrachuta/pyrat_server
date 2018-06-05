@@ -167,15 +167,15 @@ def command(request):
                           (new_uniqueid, request.POST.get('command'), request.POST.get(key)))
                 selected_users.append(request.POST.get(key))
                 if 'deluser' in request.POST.get('command'):
-                    print('++++ USUWAM USERA %s Z DB ++++' % request.POST.get('det_mac'))
+                    print('++++ USUWAM USERA %s Z DB ++++' %request.POST.get(key))
                     db_update('DELETE from users2 WHERE det_mac = \'%s\'' % request.POST.get(key))
                     # For Windows - localhost tests
-                    #if os.path.isdir('%s\media\client_ups\%s' % (BASE_DIR, request.POST.get('det_mac'))) == True:
-                    #shutil.rmtree('%s\media\client_ups\%s' % (BASE_DIR, request.POST.get('det_mac')),
+                    #if os.path.isdir('%s\media\client_ups\%s' % (BASE_DIR, request.POST.get(key))) == True:
+                    #shutil.rmtree('%s\media\client_ups\%s' % (BASE_DIR, request.POST.get(key)),
                                   #ignore_errors=True)
                     # For Linux - standard work
-                    if os.path.isdir('%s/media/client_ups/%s' % (BASE_DIR, request.POST.get('det_mac'))) == True:
-                        shutil.rmtree('%s/media/client_ups/%s' % (BASE_DIR, request.POST.get('det_mac')),
+                    if os.path.isdir('%s/media/client_ups/%s' % (BASE_DIR, request.POST.get(key))) == True:
+                        shutil.rmtree('%s/media/client_ups/%s' % (BASE_DIR, request.POST.get(key)),
                                       ignore_errors=True)
                     else:
                         pass
