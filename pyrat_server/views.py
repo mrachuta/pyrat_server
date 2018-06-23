@@ -17,9 +17,19 @@ import os
 #import sys
 import time
 import shutil
+import platform
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DET_OS = str(platform.uname())
+
+if 'Windows' in DET_OS:
+    print('++++ URUCHOMIONO NA WINDOWS ++++')
+    filespath = '%s\media\client_ups\%s'
+else:
+    print('++++ URUCHOMIONO W ŚRODOWISKU LINUX ++++')
+    filespath = '%s/media/client_ups/%s'
+
 
 
 """
@@ -55,10 +65,7 @@ def index(request):
             la_diff = get_diff(time_curr, la_db)
             db_update('UPDATE users2 SET la_diff = \'%s\' WHERE det_mac = \'%s\'' % (la_diff, filt_mac))
             # If folder with filtered mac name exists, update DB
-            # For Windows - localhost tests
-            #if os.path.isdir('%s\media\client_ups\%s' % (BASE_DIR, filt_mac)) == True:
-            # For Linux - standard work
-            if os.path.isdir('%s/media/client_ups/%s' % (BASE_DIR, filt_mac)) == True:
+            if os.path.isdir(filespath % (BASE_DIR, filt_mac)) == True:
                 db_update('UPDATE users2 SET files = \'%s\' WHERE det_mac = \'%s\'' % (filt_mac, filt_mac))
             else:
                 pass
@@ -106,12 +113,8 @@ def register(request):
                 (request.POST.get('det_mac'), request.POST.get('det_os'), request.POST.get('det_name'),
                  request.POST.get('det_int_ip'), request.POST.get('det_ext_ip'))
             )
-            # For Windows - localhost tests
-            #if not os.path.exists('%s\media\client_ups\%s' % (BASE_DIR, (request.POST.get('det_mac')))):
-                #os.makedirs('%s\media\client_ups\%s' % (BASE_DIR, (request.POST.get('det_mac'))))
-            # For Linux - standard work
-            if not os.path.exists('%s/media/client_ups/%s' % (BASE_DIR, (request.POST.get('det_mac')))):
-                os.makedirs('%s/media/client_ups/%s' % (BASE_DIR, (request.POST.get('det_mac'))))
+            if not os.path.exists(filespath % (BASE_DIR, (request.POST.get('det_mac')))):
+                os.makedirs(filespath % (BASE_DIR, (request.POST.get('det_mac'))))
             else:
                 pass
             print('++++ DODALEM NOWY PC DO BAZY ++++')
@@ -169,13 +172,8 @@ def command(request):
                 if 'deluser' in request.POST.get('command'):
                     print('++++ USUWAM USERA %s Z DB ++++' %request.POST.get(key))
                     db_update('DELETE from users2 WHERE det_mac = \'%s\'' % request.POST.get(key))
-                    # For Windows - localhost tests
-                    #if os.path.isdir('%s\media\client_ups\%s' % (BASE_DIR, request.POST.get(key))) == True:
-                    #shutil.rmtree('%s\media\client_ups\%s' % (BASE_DIR, request.POST.get(key)),
-                                  #ignore_errors=True)
-                    # For Linux - standard work
-                    if os.path.isdir('%s/media/client_ups/%s' % (BASE_DIR, request.POST.get(key))) == True:
-                        shutil.rmtree('%s/media/client_ups/%s' % (BASE_DIR, request.POST.get(key)),
+                    if os.path.isdir(filespath % (BASE_DIR, request.POST.get(key))) == True:
+                        shutil.rmtree(filespath % (BASE_DIR, request.POST.get(key)),
                                       ignore_errors=True)
                     else:
                         pass
@@ -237,7 +235,7 @@ def result(request):
                     value = str((re.search('b\'(.*)\'', str(value_enc)).group(1)))
                     print('++++ DRUKUJE DO PRZEKAZANIA DALEJ Z FILTREM DLA BINARY ++++')
                     print(value)
-                    res_params['result'] = (value + ' (Executed)')
+                    res_params['result'] = value
                 else:
                     pass
             elif 'last_activity' in key:
@@ -321,10 +319,7 @@ def upload(request):
         file = request.FILES['file']
         #print(str(file))
         # Procedure which save file in specific folder
-        # For Windows - localhost tests
-        #fs = FileSystemStorage(location=('%s\media\client_ups\%s' % (BASE_DIR, request.POST.get('det_mac'))))
-        # For Linux - standard work
-        fs = FileSystemStorage(location=('%s/media/client_ups/%s' % (BASE_DIR, (request.POST.get('det_mac')))))
+        fs = FileSystemStorage(location=(filespath % (BASE_DIR, (request.POST.get('det_mac')))))
         filename = fs.save(file.name, file)
         print('==== OTRZYMALEM PLIK ====')
         for key, value in request.POST.items():
@@ -346,10 +341,7 @@ the special procedure to generate list of files on webpage was developed.
 
 @csrf_exempt
 def listfiles(request, folder):
-    # For Windows - localhost tests
-    #files = os.listdir('%s\media\client_ups\%s' % (BASE_DIR, folder))
-    # For Linux - standard work
-    files = os.listdir('%s/media/client_ups/%s' % (BASE_DIR, folder))
+    files = os.listdir(filespath % (BASE_DIR, folder))
     # Render a webpage with links to files
     return render(request, 'files.html', {
         'files': files,
