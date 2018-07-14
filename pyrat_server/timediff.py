@@ -17,7 +17,7 @@ def get_diff(time_bigger, time_smaller):
     td_2 = int(time_diff[3] * 3600)
     td_3 = int(time_diff[4] * 60)
     td_4 = time_diff[5]
-    td_5 = 7200 # difference between remote PC local time and server time (UTC)
+    td_5 = 0 #7200 # difference between remote PC local time and server time (UTC)
 
     real_diff = td_1 + td_2 + td_3 + td_4 + td_5
 

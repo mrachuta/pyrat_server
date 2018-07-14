@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>:: pyrat :: clients</title>
+    <style> td, th { border: 1px solid black; } </style>
+</head>
+
+
+<body>
+{% if user.is_authenticated %}
+        <div id="table_cont">
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th style="width:10%">MAC Adress</th>
+                    <th>OS</th>
+                    <th>System Name</th>
+                    <th>Internal IP</th>
+                    <th>External IP</th>
+                    <th>UniqueID</th>
+                    <th style="width:15%">Command</th>
+                    <th style="width:30%">Command Result</th>
+                    <th>Online</th>
+                    <th>Available files</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in host_list %}
+                    <tr>
+                        {% autoescape off %}
+                                <td>{{ i.0 }}</td>
+                                <td><input type="checkbox" name="det_mac_{{ i.0 }}" class="selected_cli" id="det_mac_{{ i.0 }}" value="{{ i.1 }}">{{ i.1 }}</td>
+                                <td>{{ i.2 }}</td>
+                                <td>{{ i.3 }}</td>
+                                <td>{{ i.4 }}</td>
+                                <td>{{ i.5 }}</td>
+                                <td>{{ i.6 }}</td>
+                                <td>{{ i.7 }}</td>
+                                <td>{{ i.8 }}</td>
+                                {% if i.10|add:"0" < 300 %}
+                                    <td bgcolor="#33cc33">{{ i.10 }}s. ago</td>
+                                {% elif i.10 == "N/A" %}
+                                    <td bgcolor="#FF0000">N/A</td>
+                                {% else %}
+                                    <td bgcolor="#FF0000">>300 s. ago</td>
+                                {% endif %}
+                                {% if i.11 is None %}
+                                <td>None</td>
+                                {% else %}
+                                <td><a href="/listfiles/{{ i.11 }}/" target="_blank">/{{ i.11 }}/</a></td>
+                                {% endif %}
+                        {% endautoescape %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+<script language="javascript" type="text/javascript">
+$('.selected_cli').on('click', function() {
+  var fav, favs = [];
+  $('.selected_cli').each(function() { // run through each of the checkboxes
+    fav = {id: $(this).attr('id'), value: $(this).prop('checked')};
+    favs.push(fav);
+  });
+  localStorage.setItem("favorites", JSON.stringify(favs));
+});
+
+$(document).ready(function() {
+  var favorites = JSON.parse(localStorage.getItem('favorites'));
+  if (!favorites.length) {return};
+  console.debug(favorites);
+
+  for (var i=0; i<favorites.length; i++) {
+    console.debug(favorites[i].value == 'on');
+    $('#' + favorites[i].id ).prop('checked', favorites[i].value);
+  }
+});
+</script>
+        </div>
+{% else %}
+    User not authenticated.
+    <br>
+    <a href="/accounts/login/">CLICK TO LOGIN</a>
+{% endif %}
+</body>
+
+</html>

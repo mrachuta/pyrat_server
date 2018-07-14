@@ -24,7 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
     url(r'^index/$', index),
-    url(r'^join/$', join),
+    url(r'^clients/$', clients),
     url(r'^register/$', register),
     url(r'^command/$', command),
     url(r'^result/$', result),
@@ -32,4 +32,4 @@ urlpatterns = [
     url(r'^ping/$', last_activity),
     url(r'^upload/$', upload),
     url(r'^listfiles/(?P<folder>\w+)/$', listfiles)
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
