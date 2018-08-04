@@ -23,10 +23,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DET_OS = str(platform.uname())
 
 if 'Windows' in DET_OS:
-    print('==== URUCHOMIONO NA WINDOWS ====')
+    print('==== URUCHOMIONO W SRODOWISKU WINDOWS ====')
     filespath = '%s\media\client_ups\%s'
 else:
-    print('==== URUCHOMIONO W ŚRODOWISKU LINUX ====')
+    print('==== URUCHOMIONO W SRODOWISKU LINUX ====')
     filespath = '%s/media/client_ups/%s'
 
 
@@ -109,7 +109,7 @@ def register(request):
                  data.get('det_int_ip'), data.get('det_ext_ip')))
             if not os.path.exists(filespath % (BASE_DIR, (data.get('det_mac')))):
                 os.makedirs(filespath % (BASE_DIR, (data.get('det_mac'))))
-            print('==== DODANO NOWY PC DO BAZY ====')
+            print('==== DODANO NOWEGO KLIENTA DO BAZY ====')
             return HttpResponse('Dodano nowego klienta %s do DB' % data.get('det_mac'))
         elif (data.get('det_mac') in is_new) and ((data.get('det_int_ip') or data.get('det_ext_ip')) not in is_new):
             db_update(
@@ -119,9 +119,9 @@ def register(request):
                 'WHERE det_mac = \'%s\''
                 %(data.get('det_os'), data.get('det_name'), data.get('det_int_ip'),
                  data.get('det_ext_ip'), data.get('det_mac')))
-            return HttpResponse('Zaktualizowan twojego klienta %s w DB' % data.get('det_mac'))
+            return HttpResponse('Zaktualizowano twojego klienta %s w DB' % data.get('det_mac'))
         else:
-            print('==== KLIENT JEST W BAZIE, AKTUALIZUE JEZELI KONIECZNE ====')
+            print('==== KLIENT JEST W BAZIE, AKTUALIZUJE JEZELI KONIECZNE ====')
             return HttpResponse('Twoj klient %s istnieje już w DB.' % data.get('det_mac'))
 
     else:
@@ -223,7 +223,7 @@ def result(request):
                 pass
         print('==== DRUKUJE PARAMETRY DO ZAPISU DO DB ====')
         for key, value in host_re.items():
-            print(key + ' : ' + value)
+            print(key + ' : ' + u'%s', value.encode('utf-8', 'ignore'))
         # Adding result to database
         db_update(
                 'UPDATE users2 '
@@ -253,7 +253,7 @@ The command and data was generated earlier by command function.
 def order(request):
     if request.method == 'POST':
         data = dec_data(request.POST.get('a3Vyd'))
-        print('==== ŻĄDANIE KLIENTA PO AKTUALNA KOMENDE I uniqueid =====')
+        print('==== ZADANIE KLIENTA PO AKTUALNA KOMENDE I uniqueid =====')
         curr_uniqueid = re.search('\(\'(.*)\',\)', str(db_fetchone('SELECT * from lastuniqueid'))).group(1)
         print(curr_uniqueid)
         command = db_fetchone(
@@ -317,11 +317,10 @@ def upload(request):
         fs = FileSystemStorage(location=(filespath % (BASE_DIR, (data.get('det_mac')))))
         filename = fs.save(file.name, file)
         print('==== KLIENT PRZESYLA PLIK ====')
-        for key, value in request.POST.items():
+        #for key, value in request.POST.items():
+        for key, value in data.items():
             print(key + ' : ' + value)
-        print(filename)
-        print('Det mac')
-        print(data.get('det_mac'))
+        print('file: %s', filename)
         # Page generated only for test purposes
         return HttpResponse('Otrzymano plik %s od %s' % (filename, data.get('det_mac')))
     else:
