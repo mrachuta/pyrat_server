@@ -1,0 +1,160 @@
+td, th{
+border: 1px solid black;
+}
+
+.button {
+    padding: 30px 30px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px 10px;
+    cursor: pointer;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    border: 2px solid #e7e7e7;
+    background-size: 36px 36px;
+    color: white; 
+}
+
+.b_delete {
+    background: url('/static/pyrat_server/img/delete_u.png');
+    background-size: 36px 36px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.b_delete:hover {
+    background: url('/static/pyrat_server/img/delete_c.png');
+    background-size: 36px 36px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #e7e7e7;
+}
+
+.b_popup {
+    background: url('/static/pyrat_server/img/popup_u.png');
+    background-size: 36px 36px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.b_popup:hover {
+    background: url('/static/pyrat_server/img/popup_c.png');
+    background-size: 36px 36px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #e7e7e7;
+}
+
+.b_command {
+    background: url('/static/pyrat_server/img/command_u.png');
+    background-size: 36px 36px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.b_command:hover {
+    background: url('/static/pyrat_server/img/command_c.png');
+    background-size: 36px 36px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #e7e7e7;
+}
+
+.b_downloader {
+    background: url('/static/pyrat_server/img/downloader_u.png');
+    background-size: 36px 36px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.b_downloader:hover {
+    background: url('/static/pyrat_server/img/downloader_c.png');
+    background-size: 36px 36px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #e7e7e7;
+}
+
+.b_screenshot {
+    background: url('/static/pyrat_server/img/screenshot_u.png');
+    background-size: 36px 36px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.b_screenshot:hover {
+    background: url('/static/pyrat_server/img/screenshot_c.png');
+    background-size: 36px 36px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #e7e7e7;
+}
+
+.b_upload {
+    background: url('/static/pyrat_server/img/upload_u.png');
+    background-size: 36px 36px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.b_upload:hover {
+    background: url('/static/pyrat_server/img/upload_c.png');
+    background-size: 36px 36px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #e7e7e7;
+}
+
+#container{
+width: 100%;
+margin: 0 auto;
+align-items: center;
+}
+
+#logo{
+margin: 10px;
+height: 120px;
+text-align: center;
+}
+
+.column_big{
+float: left;
+margin-bottom: 20px;
+padding: 10px;
+width: 57%;
+height: 200px;
+}
+
+.column_small{
+float: right;
+background: #a4a7ad;
+color: white;
+border-radius: 25px;
+padding: 10px;
+margin-bottom: 20px;
+width: 40%;
+height: 200px;
+font-size: 14px;
+}
+
+.query_header{
+float: left;
+margin-bottom: 20px;
+padding: 10px;
+width: 100px;
+height: 20px;
+}
+
+.query_result{
+float: left;
+margin-bottom: 20px;
+padding: 10px;
+width: 50%;
+height: 20px;
+}
+
+#clear{
+clear: both;
+}

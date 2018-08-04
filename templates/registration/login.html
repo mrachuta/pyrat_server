@@ -3,14 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <title>:: pyrat :: login</title>
+    <link rel="stylesheet" type="text/css" href="/static/pyrat_server/style.css">
 </head>
 <body>
-<!-- templates/registration/login.html -->
-<h2>Login</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Login</button>
-</form>
+    <div id="container">
+        <div id="logo">
+            <pre>
+ ______   __  __     ______     ______     ______
+/\  == \ /\ \_\ \   /\  == \   /\  __ \   /\__  _\
+\ \  _-/ \ \____ \  \ \  __<   \ \  __ \  \/_/\ \/
+ \ \_\    \/\_____\  \ \_\ \_\  \ \_\ \_\    \ \_\
+  \/_/     \/_____/   \/_/ /_/   \/_/\/_/     \/_/
+                </pre>
+        </div>
+        <!-- templates/registration/login.html -->
+        <div align="center">
+            <form method="post">
+              {% csrf_token %}
+              {{ form.as_p }}
+              <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
 </body>
 </html>

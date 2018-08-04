@@ -4,10 +4,7 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-#from django.db import connection, InterfaceError
-#from django.utils.safestring import mark_safe
 from django.core.files.storage import FileSystemStorage
-#from django.db.utils import InterfaceError
 from .dbask import db_fetchall, db_fetchone, db_update
 from .timediff import get_diff
 import random
@@ -15,7 +12,6 @@ import string
 import re
 import base64
 import os
-#import sys
 import time
 import shutil
 import platform
@@ -27,10 +23,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DET_OS = str(platform.uname())
 
 if 'Windows' in DET_OS:
-    print('++++ URUCHOMIONO NA WINDOWS ++++')
+    print('==== URUCHOMIONO NA WINDOWS ====')
     filespath = '%s\media\client_ups\%s'
 else:
-    print('++++ URUCHOMIONO W ŚRODOWISKU LINUX ++++')
+    print('==== URUCHOMIONO W ŚRODOWISKU LINUX ====')
     filespath = '%s/media/client_ups/%s'
 
 
@@ -51,7 +47,7 @@ def clients(request):
                             'ORDER BY id')
     mac_list = db_fetchall('SELECT det_mac FROM users2 '
                            'ORDER BY id')
-    print(host_list)
+    #print(host_list)
     #print(mac_list)
     time_curr = time.strftime('%Y-%m-%d %H:%M:%S')
     # Time list to check that connection with host is timed out or not (see index.html file)
@@ -96,7 +92,7 @@ or update old information.
 @csrf_exempt
 def register(request):
     if request.method == 'POST':
-        print('==== HOST PRZEDSTAWIA SIE ====')
+        print('==== KLIENT PRZEDSTAWIA SIE ====')
         data = dec_data(request.POST.get('a3Vyd'))
         for key, value in data.items():
             print(key + ' : ' + value)
@@ -113,8 +109,8 @@ def register(request):
                  data.get('det_int_ip'), data.get('det_ext_ip')))
             if not os.path.exists(filespath % (BASE_DIR, (data.get('det_mac')))):
                 os.makedirs(filespath % (BASE_DIR, (data.get('det_mac'))))
-            print('++++ DODALEM NOWY PC DO BAZY ++++')
-            return HttpResponse('Dodano PC %s do DB' % data.get('det_mac'))
+            print('==== DODANO NOWY PC DO BAZY ====')
+            return HttpResponse('Dodano nowego klienta %s do DB' % data.get('det_mac'))
         elif (data.get('det_mac') in is_new) and ((data.get('det_int_ip') or data.get('det_ext_ip')) not in is_new):
             db_update(
                 'UPDATE users2 '
@@ -123,10 +119,10 @@ def register(request):
                 'WHERE det_mac = \'%s\''
                 %(data.get('det_os'), data.get('det_name'), data.get('det_int_ip'),
                  data.get('det_ext_ip'), data.get('det_mac')))
-            return HttpResponse('Zaktualizowano PC %s w DB' % data.get('det_mac'))
+            return HttpResponse('Zaktualizowan twojego klienta %s w DB' % data.get('det_mac'))
         else:
-            print('++++ NIE JESTES NOWY, TAKI MAC JEST W BAZIE ++++')
-            return HttpResponse('PC %s istnieje już w DB.' % data.get('det_mac'))
+            print('==== KLIENT JEST W BAZIE, AKTUALIZUE JEZELI KONIECZNE ====')
+            return HttpResponse('Twoj klient %s istnieje już w DB.' % data.get('det_mac'))
 
     else:
         return HttpResponse('No i gdzie te dane z POST?')
@@ -156,9 +152,9 @@ def command(request):
     if request.method == 'POST':
         sel_users = []
         new_uniqueid = str(get_unique_id())
-        print('++++ NOWE uniqueid W ZWIAZKU Z NOWA KOMENDA ++++')
+        print('==== NOWE uniqueid W ZWIAZKU Z NOWO WYWOLANA KOMENDA ====')
         print(new_uniqueid)
-        print('++++ DRUKUJE KOMENDE I PARAMETRY ++++')
+        print('==== DRUKUJE NOWA KOMENDE I PARAMETRY ====')
         for key, value in request.POST.items():
             print(key + ' : ' + value)
         # There is command, that allow to delete user by CC center
@@ -170,7 +166,7 @@ def command(request):
                            request.POST.get(key)))
                 sel_users.append(request.POST.get(key))
                 if 'deluser' in request.POST.get('command'):
-                    print('++++ USUWAM USERA %s Z DB ++++' %request.POST.get(key))
+                    print('==== USUWAM KLIENTA %s Z DB ====' %request.POST.get(key))
                     db_update('DELETE from users2 '
                               'WHERE det_mac = \'%s\''
                               % request.POST.get(key))
@@ -208,26 +204,26 @@ def result(request):
         data = dec_data(request.POST.get('a3Vyd'))
         #print(result_data)
         host_re = {}
-        print('=== HOST PRZESYLA REZULTAT KOMENDY ====')
+        print('==== KLIENT PRZESYLA REZULTAT WYKONANEJ KOMENDY ====')
         for key, value in data.items():
-            print(key + ' : ' + value)
+            #print(key + ' : ' + value)
             if 'func_result' in key:
-                print('++++ MAM KEY ++++')
-                print(value)
+                #print('==== MAM KEY ====')
+                #print(value)
                 #value_enc = base64.b64decode(value).decode('utf-8')
                 # Decode data received as result, because the data is encoded (base64)
-                # If result is a multiple-line output, there is necessary to replace rn to html tag (nice look)
-                value_filter = ((value.replace('\\r\\n', '<br>')).replace('<DIR>', '=DIR='))
-                print('++++ DRUKUJE CZYSTY REZULTAT Z FILTRAMI DO DB ++++')
-                print(value_filter)
+                value_filter = value.replace('<DIR>', '=DIR=')
+                #print('==== DRUKUJE CZYSTY REZULTAT Z FILTRAMI DO DB ====')
+                #print(value_filter)
                 host_re['result'] = value_filter
             elif 'last_activity' in key:
                 # Add second parameter to list - last activity, which also was send by remote PC
                 host_re['last_activity'] = value
             else:
                 pass
-        print('++++ DRUKUJE PARAMETRY DO ZAPISU DO DB ++++')
-        print(host_re)
+        print('==== DRUKUJE PARAMETRY DO ZAPISU DO DB ====')
+        for key, value in host_re.items():
+            print(key + ' : ' + value)
         # Adding result to database
         db_update(
                 'UPDATE users2 '
@@ -257,7 +253,7 @@ The command and data was generated earlier by command function.
 def order(request):
     if request.method == 'POST':
         data = dec_data(request.POST.get('a3Vyd'))
-        print('==== REQUEST PO AKTUALNA KOMENDE I uniqueid =====')
+        print('==== ŻĄDANIE KLIENTA PO AKTUALNA KOMENDE I uniqueid =====')
         curr_uniqueid = re.search('\(\'(.*)\',\)', str(db_fetchone('SELECT * from lastuniqueid'))).group(1)
         print(curr_uniqueid)
         command = db_fetchone(
@@ -272,8 +268,6 @@ def order(request):
             function = 'None'
             params = 'None'
         todo = {'uniqueid': curr_uniqueid, 'function': function, 'params': params}
-        print('Drukuje todo')
-        print(todo)
         todo_str = base64.b64encode((str(todo).replace('\'', '"')).encode('UTF-8')).decode('UTF-8')
         content = {'65hFDs': todo_str}
         return JsonResponse(content)
@@ -293,7 +287,7 @@ Important: this is only one function, that have other name and url
 def last_activity(request):
     if request.method == 'POST':
         data = dec_data(request.POST.get('a3Vyd'))
-        print('==== OTRZYMUJE PING OD HOSTA ====')
+        print('==== KLIENT PRZESYLA PING ====')
         for key, value in data.items():
             print(key + ' : ' + value)
         db_update('UPDATE users2 '
@@ -322,7 +316,7 @@ def upload(request):
         # Procedure which save file in specific folder
         fs = FileSystemStorage(location=(filespath % (BASE_DIR, (data.get('det_mac')))))
         filename = fs.save(file.name, file)
-        print('==== OTRZYMALEM PLIK ====')
+        print('==== KLIENT PRZESYLA PLIK ====')
         for key, value in request.POST.items():
             print(key + ' : ' + value)
         print(filename)
@@ -350,4 +344,3 @@ def listfiles(request, folder):
         'files': files,
         'folder': folder
     })
-
