@@ -155,36 +155,33 @@ def command(request):
         print('==== NOWE uniqueid W ZWIAZKU Z NOWO WYWOLANA KOMENDA ====')
         print(new_uniqueid)
         print('==== DRUKUJE NOWA KOMENDE I PARAMETRY ====')
+        command_list = []
         for key, value in request.POST.items():
             print(key + ' : ' + value)
-        # There is command, that allow to delete user by CC center
+            if 'det_mac' not in key:
+                command_list.append(value)
+        for key, value in request.POST.items():
             if 'det_mac' in key:
                 db_update('UPDATE users2 '
                           'SET uniqueid = \'%s\', command = \'%s\' '
                           'WHERE det_mac = \'%s\''
-                          % (new_uniqueid, request.POST.get('command'),
-                           request.POST.get(key)))
-                sel_users.append(request.POST.get(key))
-                if 'deluser' in request.POST.get('command'):
-                    print('==== USUWAM KLIENTA %s Z DB ====' %request.POST.get(key))
+                          % (new_uniqueid, (','.join(command_list)), value))
+                sel_users.append(value)
+                if 'deluser' in command_list[0]:
+                    print('==== USUWAM KLIENTA %s Z DB ====' % request.POST.get(key))
                     db_update('DELETE from users2 '
                               'WHERE det_mac = \'%s\''
                               % request.POST.get(key))
                     if os.path.isdir(filespath % (BASE_DIR, request.POST.get(key))) == True:
                         shutil.rmtree(filespath % (BASE_DIR, request.POST.get(key)),
                                       ignore_errors=True)
-                    else:
-                        pass
-                else:
-                    pass
             else:
                 pass
-        # Otherwise, add some records to DB and generate site (generated site is only for information purposes)
         db_update('UPDATE lastuniqueid '
                   'SET uniqueid = \'%s\' '
                   'WHERE uniqueid LIKE \'______\''
                   % new_uniqueid)
-        return HttpResponse('%s;%s;%s' % (new_uniqueid, request.POST.get('command'), sel_users))
+        return HttpResponse('%s;%s;%s' % (new_uniqueid, command_list, sel_users))
     else:
         return HttpResponse('Przeciez POST jest pusty...')
 
@@ -256,14 +253,17 @@ def order(request):
         print('==== ZADANIE KLIENTA PO AKTUALNA KOMENDE I uniqueid =====')
         curr_uniqueid = re.search('\(\'(.*)\',\)', str(db_fetchone('SELECT * from lastuniqueid'))).group(1)
         print(curr_uniqueid)
-        command = db_fetchone(
+        command_db = db_fetchone(
             'SELECT command FROM users2 '
             'WHERE uniqueid = \'%s\' AND det_mac =\'%s\''
             % (curr_uniqueid, data.get('det_mac')))
-        print(command)
-        if command is not None:
-            function = (re.search('#(.*)\(', str(command[0])).group(1))
-            params = (re.search('\((.*)\)', str(command[0])).group(1)).split(' ')
+        #print(command_db)
+        if command_db is not None:
+            command_list = command_db[0].split(',')
+            function = command_list[0]
+            print(function)
+            params = command_list[1:]
+            print(params)
         else:
             function = 'None'
             params = 'None'
@@ -313,7 +313,7 @@ def upload(request):
         data = dec_data(request.POST.get('a3Vyd'))
         file = request.FILES['f1L3']
         #print(str(file))
-        # Procedure which save file in specific folder
+        #  Save file in specific folder
         fs = FileSystemStorage(location=(filespath % (BASE_DIR, (data.get('det_mac')))))
         filename = fs.save(file.name, file)
         print('==== KLIENT PRZESYLA PLIK ====')

@@ -1,9 +1,12 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>:: pyrat :: files uploaded by {{ folder }}</title>
 </head>
+
 <body>
     {% if files|length == 0 %}
         <h1>There is no files form this client</h1>
@@ -13,4 +16,5 @@
         {% endfor %}
     {% endif %}
 </body>
+
 </html>

@@ -1,6 +1,4 @@
-td, th{
-border: 1px solid black;
-}
+td, th {border: 1px solid black;}
 
 .button {
     padding: 30px 30px;
@@ -107,54 +105,197 @@ border: 1px solid black;
     background-color: #e7e7e7;
 }
 
-#container{
+.img_add_active {
+    padding: 10px 10px;
+    margin: 0px 3px 0px 0px;
+    cursor: pointer;
+    background: url('/static/pyrat_server/img/add_active.png');
+    background-size: 18px 18px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.img_remove_active {
+    padding: 10px 10px;
+    margin: 0px 3px 0px 0px;
+    cursor: pointer;
+    background: url('/static/pyrat_server/img/remove_active.png');
+    background-size: 18px 18px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.img_add_inactive {
+    padding: 10px 10px;
+    margin: 0px 3px 0px 0px;
+    cursor: pointer;
+    background: url('/static/pyrat_server/img/add_inactive.png');
+    background-size: 18px 18px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.img_remove_inactive {
+    padding: 10px 10px;
+    margin: 0px 3px 0px 0px;
+    cursor: pointer;
+    background: url('/static/pyrat_server/img/remove_inactive.png');
+    background-size: 18px 18px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.command_input {
+resize: both;
+overflow: auto;
+min-width: 15em;
+max-width: 60em;
+min-height: 1em;
+max-height: 1em;
+}
+
+.container {
 width: 100%;
 margin: 0 auto;
 align-items: center;
 }
 
-#logo{
+#topbar {
+overflow: hidden;
+background-color: #FFFFFF;
+position: fixed;
+top: 0;
+}
+
+.logo {
 margin: 10px;
 height: 120px;
 text-align: center;
 }
 
-.column_big{
+.column_args {
 float: left;
-margin-bottom: 20px;
+margin-bottom: 10px;
 padding: 10px;
-width: 57%;
-height: 200px;
+width: 60%;
+height: 10%;
 }
 
-.column_small{
+.column_buttons {
+float: right;
+margin-bottom: 10px;
+padding: 10px;
+width: 37%;
+height: 10%;
+}
+
+.column_info {
 float: right;
 background: #a4a7ad;
 color: white;
 border-radius: 25px;
 padding: 10px;
-margin-bottom: 20px;
-width: 40%;
-height: 200px;
+margin-bottom: 10px;
+width: 35%;
+height: 210px;
 font-size: 14px;
 }
 
-.query_header{
+.query_last_header {
 float: left;
-margin-bottom: 20px;
 padding: 10px;
-width: 100px;
-height: 20px;
+width: 8%;
+height: 10%;
 }
 
-.query_result{
+.query_last {
 float: left;
-margin-bottom: 20px;
 padding: 10px;
 width: 50%;
-height: 20px;
+height: 10%;
 }
 
-#clear{
-clear: both;
+.table_header {
+align-items: center;
+margin-bottom: 0px;
+margin-left: 10px;
+margin-right: 10px;
+height: 10%;
+}
+
+#fresh_table_cont {
+align-items: center;
+margin-left: 10px;
+margin-right: 2px;
+margin-top: 22%;
+}
+
+table.fixed {
+table-layout:fixed;
+width:100%;
+word-break:break-all;
+}
+
+table.fixed th {overflow:hidden;}
+table.fixed th:nth-of-type(1) {width:2%;}
+table.fixed th:nth-of-type(2) {width:10%;}
+table.fixed th:nth-of-type(3) {width:8%;}
+table.fixed th:nth-of-type(4) {width:8%;}
+table.fixed th:nth-of-type(5) {width:8%;}
+table.fixed th:nth-of-type(6) {width:8%;}
+table.fixed th:nth-of-type(7) {width:5%;}
+table.fixed th:nth-of-type(8) {width:14%;}
+table.fixed th:nth-of-type(9) {width:24%;}
+table.fixed th:nth-of-type(10) {width:4%;}
+table.fixed th:nth-of-type(11) {width:9%;}
+
+table.fixed td {overflow:hidden;}
+
+table.fixed td:nth-of-type(1) {width:2%;}
+table.fixed td:nth-of-type(2) {width:10%;}
+table.fixed td:nth-of-type(3) {width:8%;}
+table.fixed td:nth-of-type(4) {width:8%;}
+table.fixed td:nth-of-type(5) {width:8%;}
+table.fixed td:nth-of-type(6) {width:8%;}
+table.fixed td:nth-of-type(7) {width:5%;}
+table.fixed td:nth-of-type(8) {width:14%;}
+table.fixed td:nth-of-type(9) {width:24%;}
+table.fixed td:nth-of-type(10) {width:4%;}
+table.fixed td:nth-of-type(11) {width:9%;}
+
+.background_when_alert {
+display: none;
+position: fixed;
+z-index: 1;
+padding-top: 100px;
+left: 0;
+top: 0;
+width: 100%;
+height: 100%;
+overflow: auto;
+background-color: rgb(0,0,0);
+background-color: rgba(0,0,0,0.4);
+}
+
+.alert_cont {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.alert_help_close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.alert_help_close:hover {}
+
+.alert_help_close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
 }
