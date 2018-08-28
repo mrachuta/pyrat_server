@@ -29,8 +29,8 @@
                                                 <a href="#" id="more_{{ i.1 }}">-> CLICK FOR MORE <-</a>
                                                 <script>
                                                 document.getElementById("more_{{ i.1 }}").onclick = function() {
-                                                var text = "{{ i.8 }}";
-                                                var text_clear = text.replace(/<br>/g, "\n");
+                                                var text = "{{ i.8 }}"
+                                                var text_clear = text.replace(/<br>/g, "\n").replace(/\\/g, "\\\\");
                                                 alert(text_clear);
                                                 }
                                                 </script>

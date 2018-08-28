@@ -156,12 +156,12 @@ def command(request):
         print(new_uniqueid)
         print('==== DRUKUJE NOWA KOMENDE I PARAMETRY ====')
         command_list = []
-        for key, value in request.POST.items():
+        command_list.insert(0, request.POST.get('function'))
+        for key, value in sorted(request.POST.items()):
             print(key + ' : ' + value)
-            if 'det_mac' not in key:
+            if 'arg' in key:
                 command_list.append(value)
-        for key, value in request.POST.items():
-            if 'det_mac' in key:
+            elif 'det_mac' in key:
                 db_update('UPDATE users2 '
                           'SET uniqueid = \'%s\', command = \'%s\' '
                           'WHERE det_mac = \'%s\''
@@ -209,7 +209,7 @@ def result(request):
                 #print(value)
                 #value_enc = base64.b64decode(value).decode('utf-8')
                 # Decode data received as result, because the data is encoded (base64)
-                value_filter = value.replace('<DIR>', '=DIR=')
+                value_filter = value.replace('<DIR>', '=DIR=').replace('\\', '\\\\')
                 #print('==== DRUKUJE CZYSTY REZULTAT Z FILTRAMI DO DB ====')
                 #print(value_filter)
                 host_re['result'] = value_filter
