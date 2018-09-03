@@ -19,7 +19,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Load secrets (secret key, passwords to db, etc.)
 
-with open('/home/mati/python/pyrat/pyrat_server/pyrat_server/secrets') as s:
+with open(os.path.join(BASE_DIR, 'pyrat_server/secrets')) as s:
     SECRETS = [key.replace('\n', '') for key in s.readlines()]
 
 # Quick-start development settings - unsuitable for production
@@ -133,8 +133,7 @@ STATICFILES_DIRS = [
    os.path.join(BASE_DIR, "static"),
 ]
 
-#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATIC_ROOT = '/home/mati/sraka/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_data')
 
 LOGGING = {
     'disable_existing_loggers': False,
