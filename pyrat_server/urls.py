@@ -32,4 +32,7 @@ urlpatterns = [
     url(r'^ping/$', last_activity),
     url(r'^upload/$', upload),
     url(r'^listfiles/(?P<folder>\w+)/$', listfiles)
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+]
+
+if settings.DEBUG is True:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)  + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

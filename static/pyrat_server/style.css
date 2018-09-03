@@ -12,7 +12,7 @@ td, th {border: 1px solid black;}
     transition-duration: 0.4s;
     border: 2px solid #e7e7e7;
     background-size: 36px 36px;
-    color: white; 
+    color: white;
 }
 
 .b_delete {
@@ -148,10 +148,10 @@ td, th {border: 1px solid black;}
 .command_input {
 resize: both;
 overflow: auto;
-min-width: 15em;
-max-width: 60em;
-min-height: 1em;
-max-height: 1em;
+min-width: 180px;
+max-width: 500px;
+min-height: 18px;
+max-height: 18px;
 }
 
 .container {

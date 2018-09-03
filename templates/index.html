@@ -5,7 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <title>:: pyrat :: command center</title>
-    <link rel="stylesheet" type="text/css" href="/static/pyrat_server/style.css">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'pyrat_server/style.css' %}">
     <script src="https://code.jquery.com/jquery-latest.pack.js" type="text/javascript"></script>
 </head>
 
@@ -43,13 +44,17 @@
                     <br>
                     <br>
                     <textarea class="command_input" cols="35" placeholder="Main command" id="arg0"></textarea>
-                    <a href="#" class="img_add_inactive"></a><a href="#" class="img_remove_inactive"></a>
+                    <a href="#" class="img_add_inactive"></a>
+                    <a href="#" class="img_remove_inactive"></a>
                     <textarea class="command_input" cols="15" placeholder="1st arg" id="arg1"></textarea>
-                    <a href="#" class="img_add_inactive"></a><a href="#" class="img_remove_inactive"></a>
+                    <a href="#" class="img_add_inactive"></a>
+                    <a href="#" class="img_remove_inactive"></a>
                     <textarea class="command_input" cols="15" placeholder="2nd arg" id="arg2"></textarea>
-                    <a href="#" class="img_add_inactive"></a><a href="#" class="img_remove_inactive"></a>
+                    <a href="#" class="img_add_inactive"></a>
+                    <a href="#" class="img_remove_inactive"></a>
                     <textarea class="command_input" cols="15" placeholder="3rd arg" id="arg3"></textarea>
-                    <a href="#" class="img_add_active"></a><a href="#" class="img_remove_inactive"></a>
+                    <a href="#" class="img_add_active"></a>
+                    <a href="#" class="img_remove_inactive"></a>
                 </div>
                 <div class="column_buttons">
                     Select function:
@@ -123,7 +128,7 @@
             // Adding new fields to column_args
             // Code idea found on stackoverflow
             // max_fields is a sum of total html markups
-            var max_fields      = 19;
+            var max_fields      = 17;
             var wrapper         = $(".column_args");
             var i 				= 4;
 

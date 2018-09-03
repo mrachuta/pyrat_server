@@ -50,7 +50,7 @@ coverage.xml
 docs/_build/
 
 # My files
-pyrat_server/settings.py
+pyrat_server/secrets
 .idea
 bin
 include
@@ -59,3 +59,8 @@ media/client_ups/*
 pip-selfcheck.json
 pyrat_uwsgi.ini
 pyrat_server/uwsgi_params
+pyrat_server/test1.py
+pyrat_server/test2.py
+pyrat_server/test3.py
+pyrat_server/test4.py
+pyrat_server/test5.py
