@@ -105,5 +105,5 @@ https://github.com/mrachuta/pyrat_client
 
 ## Thanks
 
-Thanks to my girlfriend for his patience when I was coding.  
+Thanks to my girlfriend for her patience when I was coding.  
 Of course a lot of thanks to all users from Stackoverflow, whose source codes helped me in my project.
