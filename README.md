@@ -23,7 +23,7 @@ c) keeping data encoded, during transfering via port 80,
 d) very simple visual layer, with useful JS code.
 
 If you will ask why Django was used without models (pure SQL queries - maybe for someone no sense): author started learning Django from totally wrong side.
-Models should be implemented for more flexible code and typical Django functional. Unfortunatelly, 
+Models should be implemented for more flexible code and typical Django functionality. Unfortunately, 
 the power of Models was first seen at finish of development of this app. Maybe in next versions Models will be implemented.
 
 ## Technologies
@@ -75,7 +75,7 @@ Package and version
 | 12  | files         | text                 | false   | null    | false       |
 
 2. Install required packages.
-3. Create file *secrets* in the same directory as settings.py, with following data (without < and >):
+3. Create file *secrets* in the same directory where settings.py is stored, with following data (without < and >):
 ```
 <secret_key>
 <database_name>
@@ -83,8 +83,8 @@ Package and version
 <database_password>
 <database_host>
 ```
-This is suficient to set Django developer server.  
-If you will try to set server as production enviroment, uWSGI is recommended.
+This is sufficient to set Django developer server.  
+If you will try to set server as production environment, uWSGI is recommended.
 
 ## Using
 
@@ -99,8 +99,8 @@ And open in browser following adress:
 http://127.0.0.1:8000/index/
 ```
 
-Information how to use app, is available in index page - button "CLICK FOR HELP"  
-Don't forget to connect at least one client, to check how whole enviroment works:  
+Informations how to use app, are available at index page - button "CLICK FOR HELP"  
+Don't forget to connect at least one client, to check how whole environment works:  
 https://github.com/mrachuta/pyrat_client
 
 ## Thanks
