@@ -9,7 +9,7 @@ pyrat - python remote acess tool - server app.
 * [Thanks](#thanks)
 
 ## General info
-During business trip, IT-Helpdesk (from my company) helped me to install some software on my business laptop (I have no admin permissions).  
+During business trip, IT-Helpdesk (from company that I am working for) helped me to install some software on my business laptop (I have no admin privleges).  
 I wondered, how this is possible, that they still can connect to my PC, even if I was behind two NAT's.   
 The port 80 was the key.
 
@@ -17,14 +17,13 @@ This tool was created for training purposes only, never was and will be used as 
 
 Main goals for server:
 
-a) simple, lightweight code (still in progress :))))),  
-b) more work should be performed on server side than on client side,  
-c) keeping data encoded, during transfering via port 80,  
-d) very simple visual layer, with useful JS code.
+* simple, lightweight code (:D),
+* more work should be done on server side than on client side,  
+* data during transfer to server (via port 80) must be encoded,
+* very simple visual layer, with useful JS code.
 
-If you will ask why Django was used without models (pure SQL queries - maybe for someone no sense): author started learning Django from totally wrong side.
-Models should be implemented for more flexible code and typical Django functionality. Unfortunately, 
-the power of Models was first seen at finish of development of this app. Maybe in next versions Models will be implemented.
+If you will ask why Django environment was used without models (hand-made SQL queries - totally no sense): author started learning Django from totally wrong side.
+Models should be implemented. They are the one of biggest advantages of Django. Unfortunately, the power of Models was first seen at finish of development of this app. Maybe in next versions Models will be implemented.
 
 ## Technologies
 * Backend: Python3,
@@ -39,50 +38,51 @@ Code was tested on following platforms:
 
 Used libraries:
 Package and version  
-* certifi         2018.4.16
-* chardet         3.0.4    
-* Django          2.0.6    
-* django-freshly  0.1.2    
-* idna            2.7      
-* pip             18.0     
-* psycopg2        2.7.4    
-* psycopg2-binary 2.7.4    
-* pytz            2018.4   
-* requests        2.19.1   
-* setuptools      40.2.0   
-* urllib3         1.23     
-* uWSGI           2.0.17   
-* wheel           0.31.1   
+* certifi==2018.4.16
+* chardet==3.0.4    
+* Django==2.0.6    
+* django-freshly==0.1.2    
+* idna==2.7      
+* pip==18.0     
+* psycopg2==2.7.4    
+* psycopg2-binary==2.7.4    
+* pytz==2018.4   
+* requests==2.19.1   
+* setuptools==40.2.0   
+* urllib3==1.23     
+* uWSGI==2.0.17   
+* wheel==0.31.1   
 
 ## Setup
 
 1. Set free database for example on https://elephantsql.com/ with table *users2* contains following structure:
 
-
-| num | name          | typ                  | notnull | comment | primary_key |
-|-----|---------------|----------------------|---------|---------|-------------|
-| 1   | id            | integer              | true    | null    | true        |
-| 2   | det_mac       | text                 | true    | null    | false       |
-| 3   | det_os        | text                 | true    | null    | false       |
-| 4   | det_name      | text                 | true    | null    | false       |
-| 5   | det_int_ip    | text                 | true    | null    | false       |
-| 6   | det_ext_ip    | text                 | true    | null    | false       |
-| 7   | uniqueid      | character varying(6) | false   | null    | false       |
-| 8   | command       | text                 | false   | null    | false       |
-| 9   | result        | text                 | false   | null    | false       |
-| 10  | last_activity | text                 | false   | null    | false       |
-| 11  | la_diff       | text                 | false   | null    | false       |
-| 12  | files         | text                 | false   | null    | false       |
+    | num | name          | typ                  | notnull | comment | primary_key |
+    |-----|---------------|----------------------|---------|---------|-------------|
+    | 1   | id            | integer              | true    | null    | true        |
+    | 2   | det_mac       | text                 | true    | null    | false       |
+    | 3   | det_os        | text                 | true    | null    | false       |
+    | 4   | det_name      | text                 | true    | null    | false       |
+    | 5   | det_int_ip    | text                 | true    | null    | false       |
+    | 6   | det_ext_ip    | text                 | true    | null    | false       |
+    | 7   | uniqueid      | character varying(6) | false   | null    | false       |
+    | 8   | command       | text                 | false   | null    | false       |
+    | 9   | result        | text                 | false   | null    | false       |
+    | 10  | last_activity | text                 | false   | null    | false       |
+    | 11  | la_diff       | text                 | false   | null    | false       |
+    | 12  | files         | text                 | false   | null    | false       |
 
 2. Install required packages.
 3. Create file *secrets* in the same directory where settings.py is stored, with following data (without < and >):
-```
-<secret_key>
-<database_name>
-<database_user>
-<database_password>
-<database_host>
-```
+    ```
+    <secret_key>
+    <database_name>
+    <database_user>
+    <database_password>
+    <database_host>
+    ```
+4. Initiate Django in standard way (create super-user, database, etc).
+
 This is sufficient to set Django developer server.  
 If you will try to set server as production environment, uWSGI is recommended.
 
@@ -98,6 +98,7 @@ And open in browser following adress:
 ```
 http://127.0.0.1:8000/index/
 ```
+Login with previously created super-user credentials.
 
 Informations how to use app, are available at index page - button "CLICK FOR HELP"  
 Don't forget to connect at least one client, to check how whole environment works:  
